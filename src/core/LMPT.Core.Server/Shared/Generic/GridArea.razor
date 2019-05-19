@@ -1,0 +1,44 @@
+<CascadingValue Value=@CascadingDebug>
+    <div style="@BodyStyle">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@functions
+{
+    string BodyStyle;
+    [Parameter]public string Areas { get; set; } = "";
+    [Parameter]public string Columns { get; set; } = "";
+    [Parameter]public string Rows { get; set; } = "";
+    [Parameter]public bool Debug { get; set; }
+    [CascadingParameter] private bool CascadingDebug { get; set; }
+    [Parameter]public RenderFragment ChildContent { get; set; } 
+
+    protected override void OnParametersSet()
+    {
+        CascadingDebug = Debug;
+
+        var sb = new StyleBuilder("grid-template-areas", Areas)
+            .AddStyle("grid-template-columns", Columns)
+            .AddStyle("grid-template-rows", Rows)
+            .AddStyle("height", "100%")
+            .AddStyle("display", "grid");
+
+        if(CascadingDebug)
+        {
+            var random = new Random();
+            var color = String.Format("#{0:X6}", random.Next(0x1000000));
+            sb.AddStyle("background", color);
+        }
+
+        BodyStyle = sb.Build();
+    }
+
+    protected override void OnInit()
+    {
+
+
+   
+          
+    }
+}

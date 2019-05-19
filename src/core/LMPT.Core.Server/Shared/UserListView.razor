@@ -1,0 +1,92 @@
+@inject MainViewModel TheMainViewModel;
+@inject ILogger<UserListView> Logger;
+
+<ViewModelRegion ViewModel="@FansOrFollowingsViewModel">
+<GridArea 
+    Areas="'header' 'list'"
+    Rows= "auto 1fr;">
+<GridElement Area="header">
+
+            <div style="padding: 6px;">
+                <i class="icon icon-filter"></i>&nbsp;
+            
+                <div class="select">
+                    <select id="countryCode" style="width: 120px;" onChange="filterCountry()">
+                    </select>
+                </div>
+
+                <a class="button icon-only" onClick="toggleSeen()" title="Toggle show/hide of already viewed accounts.">
+                    <i class="icon icon-eye bright"></i>
+                </a>
+
+                <input style="vertical-align:middle" type="text" class="search-row" placeholder="Search by Name or ID" style="width: 45%;">
+        </div>
+  
+</GridElement>
+<GridElement Area="list">
+
+
+    
+    <div  style="
+    ">
+        <div style="
+          height:400px;
+          overflow:auto ;
+        " >
+     
+
+ 
+
+   <table class="fflist">
+        <tbody>
+            <ViewModelRegion ViewModel="@FansOrFollowingsViewModel">
+
+
+            @foreach (var uvm in FansOrFollowingsViewModel.Users)
+            {
+                <UserCard User=@uvm></UserCard>
+            }
+            </ViewModelRegion>
+
+
+        </tbody>
+    </table>
+     <div style="text-align: center;">
+        <button style="margin: 20px;width: 200px;" onclick="@FansOrFollowingsViewModel.LoadMore">Load more</button>
+    </div>
+
+           </div>
+    </div>
+   
+</GridElement>
+    </GridArea>
+          
+
+    
+ 
+</ViewModelRegion>
+
+
+@functions
+{
+    
+    [Parameter] public string FansOrFollowings { get; set; }  
+    [Parameter] public FansOrFollowingsViewModel FansOrFollowingsViewModel { get; set; }  
+
+    protected override async Task OnInitAsync()
+    {
+        if (FansOrFollowings.Contains("fans", StringComparison.InvariantCultureIgnoreCase))
+        {
+             await FansOrFollowingsViewModel.Load(ListWindowPageType.Fans);
+             
+        }
+        else
+        {
+            await FansOrFollowingsViewModel.Load(ListWindowPageType.Followings);
+        }
+        StateHasChanged();
+        
+        
+    }
+
+}

@@ -1,0 +1,29 @@
+@page "/"
+@namespace LMPT.Core.Server.Pages
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="~/"/>
+    <title>LiveMe Pro Tools</title>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <script src="js/external/jquery.min.js"></script>
+    <script src="js/external/BlazorContextMenu.js"></script>
+    <link rel="stylesheet" href="css/style.css" media="all">
+    <link rel="stylesheet" href="css/BlazorContextMenu.css" media="all">
+    <link rel="stylesheet" href="css/page_bookmarks.css" media="all">
+    <script type="text/javascript" src="js/electronInterop.js"></script>
+</head>
+
+<body>
+<app></app>
+
+<script src="_framework/blazor.server.js"></script>
+</body>
+</html>

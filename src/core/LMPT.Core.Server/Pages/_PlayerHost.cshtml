@@ -1,0 +1,36 @@
+@page "/player/{*clientPath}"
+@namespace LMPT.Core.Server.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Player</title>
+
+    <base href="~/"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+
+    <script src="js/external/jquery.min.js"></script>
+    <script src="js/external/hls.light.min.js"></script>
+    <script src="js/external/flv.min.js"></script>
+    <script src="js/external/plyr.min.js"></script>
+    <link rel="stylesheet" href="css/player.css">
+    <script src="js/player.js" defer></script>
+</head>
+
+<body>
+<app></app>
+
+<script src="_framework/blazor.server.js"></script>
+</body>
+</html>

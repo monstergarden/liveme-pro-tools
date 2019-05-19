@@ -1,0 +1,41 @@
+﻿@ChildContent
+@using System.ComponentModel
+@implements IDisposable
+@inject ILogger<ViewModelRegion> Logger
+
+@functions {
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    private INotifyPropertyChanged ViewModel { get; set; }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnChanges;
+        Logger.LogDebug("Disposed ViewModelRegion");
+    }
+
+   
+
+    public void OnChanges(object sender, PropertyChangedEventArgs theEvent)
+    {
+            try
+            {
+                
+               Invoke(() => StateHasChanged());
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogError($"VIEWMODEl-REGION: {theEvent.PropertyName} " + ex.ToString());
+            }
+    }
+
+    protected override void OnInit()
+    {
+        base.OnInit();
+        ViewModel.PropertyChanged += OnChanges;
+    }
+
+
+}

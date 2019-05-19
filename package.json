@@ -1,86 +1,134 @@
 {
-  "name": "liveme-pro-tools",
-  "version": "1.80.20180225",
-  "description": "Tools for Live.me video network",
-  "homepage": "https://github.com/thecoder75/liveme-pro-tools/",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/thecoder75/liveme-pro-tools"
-  },
-  "scripts": {
-    "postinstall": "",
-    "start": "./node_modules/.bin/electron . --enable-logging",
-    "dev": "NODE_ENV='development' npm run start",
-    "release-appveyor": "build --publish always",
-    "release-travis": "build --publish always",
-    "release": "build --publish always"
-  },
-  "author": "TheCoder75",
-  "license": "GPL-3.0",
-  "build": {
-    "appId": "com.thecoderstoolbox.livemeprotools",
-    "productName": "LiveMe Pro Tools",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "asar": true,
-    "compression": "maximum",
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+    "name": "liveme-pro-tools",
+    "version": "1.503.20190103",
+    "description": "Tools for Live.me video network",
+    "homepage": "https://github.com/thecoder75/liveme-pro-tools",
+    "main": "src/electron/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/thecoder1975/liveme-pro-tools"
+    },
+    "scripts": {
+        "postinstall": "",
+        "start": "./node_modules/.bin/electron ./src/electron/index.js --enable-logging",
+        "dev-node": "NODE_ENV='development' npm run start",
+        "dev-core-release": "dotnet run -c release -p ./src/core/LMPT.Core.Server",
+        "watch": "dotnet watch  --project ./src/core/LMPT.Core.Server  run",
+        "run-published": "dotnet ./src/core/LMPT.Core.Server/bin/release/netcoreapp3.0/publish/LMPT.Core.Server.dll",
+        "release-core-mac": "dotnet publish  ./src/core/LMPT.Core.Server -r osx.10.11-x64 --output bin/dist/mac -c release /p:TrimUnusedDependencies=true",
+        "release-core-win": "dotnet publish  ./src/core/LMPT.Core.Server -r win-x64 --output bin/dist/win -c release /p:TrimUnusedDependencies=true",
+        "release-core-linux": "dotnet publish  ./src/core/LMPT.Core.Server -r linux-x64 --output bin/dist/linux -c release /p:TrimUnusedDependencies=true",
+        "release-win": "npm run release-core-win && build -w",
+        "release-linux": "npm run release-core-linux && build -l",
+        "release-mac": "npm run release-core-mac && build -m",
+        "test": "dotnet test ./src/core/LMPT.Core.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=\"opencover,lcov\" /p:CoverletOutput=../lcov",
+        "release": "npm run release-mac && npm run release-win && npm run release-linux",
+        "migration": "cd ./src/core/LMPT.Core.DB && dotnet ef migrations add addedLikeToReplay"
+    },
+    "author": "TheCoder75",
+    "license": "GPL-3.0",
+    "dependencies": {
+        "async": "^2.6.0",
+        "axios": "^0.17.1",
+        "electron-is-dev": "^0.3.0",
+        "electron-settings": "^3.1.4",
+        "fluent-ffmpeg": "^2.1.2",
+        "format-duration": "^1.0.0",
+        "hlsdownloader": "^2.1.0",
+        "node-fetch": "^2.3.0",
+        "pretty-date": "^0.2.0",
+        "ps-node": "^0.1.6",
+        "remarkable": "^1.7.1",
+        "request": "^2.83.0",
+        "request-promise-native": "^1.0.5",
+        "shelljs": "^0.8.2",
+        "tar-fs": "^1.16.2" 
+    },
+    "devDependencies": {
+        "eslint": "^4.19.1",
+        "eslint-config-standard": "^11.0.0",
+        "eslint-plugin-import": "^2.11.0",
+        "eslint-plugin-node": "^6.0.1",
+        "eslint-plugin-promise": "^3.7.0",
+        "eslint-plugin-standard": "^3.1.0",
+        "electron": "^1.8.6",
+        "electron-builder": "^19.56.0"
+    },
+    "build": {
+        "appId": "com.thecoderstoolbox.livemeprotools",
+        "files": [
+            "src/electron",
+            "node_modules/**/*"
+        ],
+        "directories": {
+            "output": "./dist"
+        },
+        "productName": "LiveMe Pro Tools",
+        "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+        "asar": false,
+        "linux": {
+            "target": [
+                {
+                    "target": "tar.gz",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "extraResources": [
+                {
+                    "from": "src/core/LMPT.Core.Server/bin/dist/linux",
+                    "to": "app/src/core/LMPT.Core.Server/bin/dist/linux",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ],
+            "category": "Network",
+            "description": "Browse, search and manage accounts, replays and more without the need of an actual account on Live.me.",
+            "maintainer": "thecoder1975@gmail.com"
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "zip",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "extraResources": [
+                {
+                    "from": "src/core/LMPT.Core.Server/bin/dist/win",
+                    "to": "app/src/core/LMPT.Core.Server/bin/dist/win",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ],
+            "icon": "src/electron/build/appicon.ico"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "perMachine": true
+        },
+        "mac": {
+            "category": "public.app-category.video",
+            "target": [
+                "zip"
+            ],
+            "extraResources": [
+                {
+                    "from": "src/core/LMPT.Core.Server/bin/dist/mac",
+                    "to": "app/src/core/LMPT.Core.Server/bin/dist/mac",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ],
+            "identity": null,
+            "icon": "src/electron/build/appicon.icns"
         }
-      ],
-      "icon": "build/appicon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "perMachine": true
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "deb",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "category": "Network",
-      "description": "Browse, search and manage accounts, replays and more without the need of an actual account on Live.me.",
-      "maintainer": "thecoder1975@gmail.com"
-    },
-    "deb": {
-      "compression": "bzip2"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "vPrefixedTagName": true,
-        "releaseType": "release"
-      }
-    ]
-  },
-  "dependencies": {
-    "async": "^2.6.0",
-    "axios": "^0.17.1",
-    "electron-is-dev": "^0.3.0",
-    "electron-settings": "^3.1.4",
-    "format-duration": "^1.0.0",
-    "liveme-api": "^1.2.6",
-    "m3u8stream": "^0.2.1",
-    "miniget": "^1.1.0",
-    "pretty-date": "^0.2.0",
-    "request": "^2.83.0",
-    "tar-fs": "^1.16.0"
-  },
-  "devDependencies": {
-    "electron": "^1.8.2",
-    "electron-builder": "^19.56.0"
-  }
+    }
 }

@@ -1,0 +1,84 @@
+
+@page "/player/{VideoId}"
+@using System.Linq
+@using LMPT.Core.Services.Data
+@using LMPT.DB
+@using LMPT.Core.Contract.DB.Cache;
+@inject IJSRuntime JSRuntime
+@inject DataAccess Db
+@inject ILogger<Player> Logger
+
+ <header class="small">
+        <h1 id="title"></h1>
+        <div class="control-buttons">
+            <a class="@likedClass" onclick="@LikeReplayClicked" title="Like Replay">
+                @Icons.Heart(likedClass)
+            </a>
+            <a onClick="downloadReplay()" title="Download Replay">
+                @Icons.FloppyDisk
+            </a>
+            <a onClick="showUser()" title="View User">
+                @Icons.User
+            </a>
+            <a onClick="closeWindow()" class="close">
+                @Icons.Cross
+            </a>
+        </div>
+    </header>
+    <main class="has-small-header" style="display: block; overflow: hidden;">
+        <div class="mid-container" style="display: none">
+            <span class="player-msg"></span>
+        </div>
+        <video style="    
+                margin: 0px auto;
+                height: 100vh;
+                width: 100%;
+                display: inherit;" 
+                
+                id="video" controls autoplay></video>
+    </main>
+
+
+@functions{
+    [Parameter] public string VideoId { get; set; }
+    string likedClass = "";
+
+    Replay TheReplay;
+
+    protected override void OnInit()
+    {
+       TheReplay = Db.FindReplayByVid(VideoId);
+       likedClass = TheReplay.Liked ? "bright yellow" : "";
+
+    }
+
+    bool loadedVideo = false;
+
+    protected override async Task OnAfterRenderAsync()
+    { 
+        try
+        {
+            if(!loadedVideo)
+            {
+                await loadVideo(TheReplay.VideoUrl);
+                loadedVideo = true;
+            }
+        }
+        catch (System.Exception)
+        {
+            
+        }
+        
+    }
+
+    void LikeReplayClicked()
+    {
+        Logger.LogInformation("liked replay: " + VideoId);
+        Db.LikeReplay(VideoId);
+        likedClass = "bright yellow";
+    }
+
+    async Task loadVideo(string url){
+       var res = await JSRuntime.InvokeAsync<object>("loadVideo", url);
+    }
+}

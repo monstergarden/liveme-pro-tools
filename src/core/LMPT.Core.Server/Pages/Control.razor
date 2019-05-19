@@ -1,0 +1,106 @@
+@page "/coreControl"
+@inject Analytics Analytics;
+@inject Importer Importer;
+@inject DataAccess DataAccess;
+@inject ILogger<Control> Logger;
+<style>
+
+    .container {
+        display: grid;
+        grid-template-areas: "top" "console";
+        height: 100%;
+        grid-template-rows: 80px auto;
+    }
+
+    .logWindow {
+        grid-area: console;
+        background: black;
+        padding: 6px;
+    }
+
+    h4 {
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 0px;
+    }
+</style>
+     <header>
+            <h1>Core Control</h1>
+            <div class="control-buttons">
+                <a  class="close" onClick="closeWindow()">
+                    <svg class="" viewBox="0 0 20 20">
+                        <path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path>
+                    </svg>
+                </a>
+            </div>
+        </header>
+        <main>
+          
+
+
+<div class="container" >
+    <ViewModelRegion ViewModel="@Analytics">
+        <div class="marginHomeElement" style="grid-area:top">
+            <button onclick="@MigrateWatched">Import Watched</button>
+            <button onclick="@MigrateBookmarks">Import Bookmarks</button>
+            <button onclick="@HouseKeeping">HouseKeeping - Delete Stale Streamer</button>
+            <button>Check Version</button>
+            <br/>
+            <h4 style="color:grey">Logs</h4>
+            <br/>
+        </div>
+
+        <div style="-webkit-user-select: text; cursor: text; font:consolas; overflow:auto" class="logWindow" id="logs">
+            @foreach (var log in Analytics.Logs)
+            {
+                var style = "Color:Green";
+                if(log.LogLevel > 2)
+                {
+                    style = "Color:black; Background-color:red;";
+                }
+                
+                <p>
+                    <span style="font-weight: bolder;font-family:monospace; @style">@log.DateTimeFormatted</span> 
+                    <span style="Color:Grey">@log.Source</span> 
+                    <pre style="display: inline;">- @log.Log </pre>
+                </p>
+            }
+            
+        </div>
+    </ViewModelRegion>
+</div>
+
+
+
+</main>
+
+
+@functions{
+    async Task MigrateWatched()
+    {
+        Logger.LogInformation("Doing Watched Import..");
+
+        await Task.Delay(1).ConfigureAwait(true); // to release the UI thread
+        await Importer.ImportWatchedFromFile();
+    }
+
+    async Task MigrateBookmarks()
+    {
+        Logger.LogInformation("Doing Bookmark Import..");
+
+        await Task.Delay(1).ConfigureAwait(true); // to release the UI thread
+        await Importer.ImportBookmarksFromFile();
+    }
+
+    async Task HouseKeeping()
+    {
+        Logger.LogInformation("Doing Bookmark Import..");
+
+        await Task.Delay(1).ConfigureAwait(true); // to release the UI thread
+        DataAccess.HouseKeeping();
+
+    }
+}

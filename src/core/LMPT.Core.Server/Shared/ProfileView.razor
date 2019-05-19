@@ -1,0 +1,134 @@
+@using LMPT.Core.Services.Helper
+@inject IUriHelper UriHelper;
+@inject IJSRuntime JSRuntime;
+@inject ProfileViewModel ProfileViewModel;
+@inject DataAccess DataAccess;
+
+  
+<ViewModelRegion ViewModel="@ProfileViewModel">
+
+@{
+    var user = @ProfileViewModel.User;
+    
+}
+@if (ProfileViewModel.ViewStatus == MainViewStatus.ProfileNotFound)
+{
+    	<div style="margin:120px auto">
+			<h2 align="center">Profile Not Found</h2>
+		</div>
+}
+else if (ProfileViewModel.ViewStatus == MainViewStatus.LoadingProfile)
+{
+    
+    	<div style="margin:120px auto">
+			<h2 align="center">Loading Profile @ProfileViewModel.Loading ...</h2>
+        </div>
+}
+else
+{
+
+    <GridArea Rows="auto 1fr" Areas="'profileHeader' 'replays'">
+        <GridElement Area="profileHeader">
+             <div id="user-details" class="details">
+                <div class="avatar">
+                    
+                    <img class="avatar" src=@(@user?.UserInfo.face) onerror="this.src='images/nouser.png'"/>
+                    <a class="save" href="#" onClick="saveAccountFace()"><i class="icon icon-download"></i></a>
+                </div>
+                <div class="info">
+                    <h1>
+                            <a href="#" class="bookmark" onclick="@ProfileViewModel.ToggleBookmark" title="Add to Bookmarks">
+                                @{
+                                    var starClass = ProfileViewModel.IsBookmarked ? "bright yellow" : "dim";
+                                }
+                                <svg class="@starClass" viewBox="0 0 20 20">
+                                    <path d="M17.684,7.925l-5.131-0.67L10.329,2.57c-0.131-0.275-0.527-0.275-0.658,0L7.447,7.255l-5.131,0.67C2.014,7.964,1.892,8.333,2.113,8.54l3.76,3.568L4.924,17.21c-0.056,0.297,0.261,0.525,0.533,0.379L10,15.109l4.543,2.479c0.273,0.153,0.587-0.089,0.533-0.379l-0.949-5.103l3.76-3.568C18.108,8.333,17.986,7.964,17.684,7.925 M13.481,11.723c-0.089,0.083-0.129,0.205-0.105,0.324l0.848,4.547l-4.047-2.208c-0.055-0.03-0.116-0.045-0.176-0.045s-0.122,0.015-0.176,0.045l-4.047,2.208l0.847-4.547c0.023-0.119-0.016-0.241-0.105-0.324L3.162,8.54L7.74,7.941c0.124-0.016,0.229-0.093,0.282-0.203L10,3.568l1.978,4.17c0.053,0.11,0.158,0.187,0.282,0.203l4.578,0.598L13.481,11.723z"></path>
+                                </svg>                        
+                            </a>
+                        <span id="username" style="-webkit-user-select: text; cursor: text">@(user?.UserInfo.uname ?? "No User found")</span>
+                    </h1>
+                    <h2 class="id">
+                        <span>ID:</span>  @user?.UserInfo.uid 
+                        <!-- <a class="button icon-only" title="Copy to Clipboard" onClick="copyToClipboard(\'' + user.user_info.uid + '\')"><i class="icon icon-copy"></i></a> -->
+                    </h2>
+                    <h2 class="shortid"> <span>Short ID:</span>@user?.UserInfo.short_id</h2>
+                    <h2 class="level"><span>Lvl:</span>@user?.UserInfo.level</h2>
+                    <h2 class="variance" id="variance">
+                        <abbr title="Variance">
+                            <span>Var:</span><b> - </b>
+                        </abbr>
+                    </h2>
+                    <h4>
+                        <abbr
+                            title="@ProfileViewModel.GetFullCountryName()">
+                            @user?.UserInfo.countryCode
+                        </abbr>
+                    </h4>
+                    <div class="buttons">
+                        <a href="#" class="button following" onClick=@($"showFollowing('{@user.UserInfo.uid}')")>@user.CountInfo.FollowingCount Following</a>
+                        <a href="#" class="button followers" onClick=@($"showFollowers('{@user.UserInfo.uid}')")>@user.CountInfo.FollowerCount Fans</a>
+                        <a href="#" class="button" id="userHamburgerMenu"><i class="icon menu3"></i></a>
+                    </div>
+                </div>
+            </div>
+        </GridElement>
+        <GridElement Area="replays">
+            <ScrollViewer>
+                <table id="list" class="results">
+                    <thead>
+                        <tr>
+                            <th width="310">Title</th>
+                            <th width="220">
+                                <a href="#" class="link text-center" onClick="sortReplays('date')" title="Sort by Date (desc)">Date</a>
+                            </th>
+                            <th width="50" align="right">Length</th>
+                            <th width="70" align="right">
+                                <a href="#" class="link text-right" onClick="sortReplays('views')" title="Sort by Views (desc)">Views</a>
+                            </th>
+                            <th width="33" align="right">
+                            <a href="#" class="link text-right" onClick="sortReplays('vpm')" title="Sort by Views Per Minute (desc)">VPM</a>
+                        </th>
+                            <th width="70" align="right">
+                                <a href="#" class="link text-right" onClick="sortReplays('likes')" title="Sort by Likes (desc)">Likes</a>
+                            </th>
+                            <th width="33" align="right">
+                            <a href="#" class="link text-right" onClick="sortReplays('lpm')" title="Sort by Likes Per Minute (desc)">LPM</a>
+                        </th>
+                            <th width="70" align="right">
+                                <a href="#" class="link text-right" onClick="sortReplays('shares')" title="Sort by Shares (desc)">Shares</a>
+                            </th>
+                            <th width="33" align="right">
+                                <a href="#" class="link text-right" onClick="sortReplays('spm')" title="Sort by Shares Per Minute (desc)">SPM</a>
+                            </th>
+                            <th width="45">DL</th>
+                            <th width="60">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(ProfileViewModel.ViewStatus == MainViewStatus.LoadingReplays)
+                        {
+                            <p>Loading...</p>
+                        }  
+                        else if(ProfileViewModel.ViewStatus == MainViewStatus.NoReplaysFound)
+                        {
+                            <p>No Replays Found</p>
+                        }  
+                        else if(ProfileViewModel.ViewStatus == MainViewStatus.ReplaysFound)          
+                        {
+                            foreach (var rvm in ProfileViewModel.Replays)
+                            {
+                                <ReplayRow Replay=@rvm />
+                            }
+                        }
+                    </tbody>
+                </table>
+            </ScrollViewer>
+        </GridElement>
+
+    </GridArea>
+  
+   
+    
+
+}
+</ViewModelRegion>

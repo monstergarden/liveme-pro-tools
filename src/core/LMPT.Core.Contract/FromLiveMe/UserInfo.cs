@@ -1,0 +1,73 @@
+namespace LMPT.Core.Contract.FromLiveMe
+{
+    public class UserInfo
+    {
+        public string uid { get; set; }
+        public string uname { get; set; }
+        public string nickname { get; set; }
+        public string usign { get; set; }
+        public string sex { get; set; }
+        public string birthday { get; set; }
+        public string face { get; set; }
+        public string big_face { get; set; }
+        public string email { get; set; }
+        public string mobile { get; set; }
+        public string reg_time { get; set; }
+        public string status { get; set; }
+        public string model { get; set; }
+        public string is_verified { get; set; }
+        public string verified_info { get; set; }
+        public string cm_openid { get; set; }
+        public string score { get; set; }
+        public string suggest_name { get; set; }
+        public string is_seller { get; set; }
+        public string shop_msg_interval { get; set; }
+        public string countryCode { get; set; }
+        public string short_id { get; set; }
+        public string gold { get; set; }
+        public string star { get; set; }
+        public string currency { get; set; }
+        public string dollar { get; set; }
+        public string money { get; set; }
+        public string virtual_cash_desc { get; set; }
+        public string praise { get; set; }
+        public string msgnum { get; set; }
+        public string exchange { get; set; }
+        public string level { get; set; }
+        public string level_start_exp { get; set; }
+        public string cur_exp { get; set; }
+        public string next_exp { get; set; }
+        public string anchor_level { get; set; }
+        public string current_anchor_exp { get; set; }
+        public string anchor_exp { get; set; }
+        public string isbindthird { get; set; }
+        public string gamecover_type { get; set; }
+        public string cover { get; set; }
+        public string big_cover { get; set; }
+        public string game_cover { get; set; }
+        public string big_game_cover { get; set; }
+        public string isAdmin { get; set; }
+        public string forbid_admin { get; set; }
+        public string showfont { get; set; }
+        public string is_star { get; set; }
+        public string star_is_verified { get; set; }
+        public string area { get; set; }
+        public string isVIP { get; set; }
+        public string anchor_level_name { get; set; }
+        public string is_open { get; set; }
+        public string is_show_shortvideo { get; set; }
+        public string is_exchange { get; set; }
+        public string levelRight { get; set; }
+        public string game_live { get; set; }
+        public string worn_badge { get; set; }
+        public string is_best { get; set; }
+        public string prime_family_id { get; set; }
+        public string prime_family_name { get; set; }
+        public string prime_family_icon { get; set; }
+        public string prime_family_level { get; set; }
+        public string is_richer { get; set; }
+        public string is_newanchor { get; set; }
+        public string is_sign { get; set; }
+        public string is_million { get; set; }
+    }
+}
