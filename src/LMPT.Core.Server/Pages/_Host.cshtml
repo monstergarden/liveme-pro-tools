@@ -19,7 +19,12 @@
     <link rel="stylesheet" href="css/style.css" media="all">
     <link rel="stylesheet" href="css/BlazorContextMenu.css" media="all">
     <link rel="stylesheet" href="css/page_bookmarks.css" media="all">
-
+    <script>
+        window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+    alert("Error occured: " + errorMsg);//or any message
+    return false;
+};
+    </script>
 </head>
 
 <body>

@@ -4,11 +4,6 @@ var hlsPlayer, flvPlayer, videoInfo, playerOptions, currentStream, title,
     video, plyr, isSeeking, lastSeek
 
 
-    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-        alert("Error occured: " + errorMsg);//or any message
-        return false;
-    };
-
 
 // Plyr options are available here:
 // https://github.com/sampotts/plyr/tree/v3.5.3#options

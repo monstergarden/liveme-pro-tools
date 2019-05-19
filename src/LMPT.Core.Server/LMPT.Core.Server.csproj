@@ -15,6 +15,9 @@
       <!-- extends watching group to include *.js files -->
       <Watch Include="..\**\*.cshtml" />
       <Watch Include="..\**\*.razor" />
+      <Watch Include="..\**\*.js" />
+      <Watch Include="..\**\*.html" />
+      <Watch Include="..\**\*.css" />
     </ItemGroup>
 
   <ItemGroup>
