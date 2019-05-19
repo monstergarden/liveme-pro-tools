@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json;
+      https://dotnet.myget.org/F/blazor-dev/api/v3/index.json;
+    </RestoreAdditionalProjectSources>
+    <LangVersion>8</LangVersion>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
     <ItemGroup>
