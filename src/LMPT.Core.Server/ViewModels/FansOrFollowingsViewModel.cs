@@ -16,8 +16,12 @@ namespace LMPT.Core.Server.ViewModels
 {
     public class FansOrFollowingsViewModel : BaseViewModel, IDisposable
     {
-        
+
         private const int MaxPageSize = 15;
+        public ObservableCollection<ListViewUserCard> Users { get; set; }
+        public ListWindowPageType PageType { get; set; }
+        public string? UserId { get; set; }
+        public LiveMeUser? OfUser { get; set; }
         private readonly CancellationTokenSource _cts;
         private readonly DataAccess _dataAccess;
 
@@ -42,14 +46,8 @@ namespace LMPT.Core.Server.ViewModels
             Users = new ObservableCollection<ListViewUserCard>();
             Users.CollectionChanged += (s, e) => NofifyChanged();
         }
-        
-
-        public ObservableCollection<ListViewUserCard> Users { get; set; }
-        public ListWindowPageType PageType { get; set; }
-        public string UserId { get; set; }
 
 
-        public LiveMeUser OfUser { get; set; }
 
         public void Dispose()
         {
@@ -73,7 +71,9 @@ namespace LMPT.Core.Server.ViewModels
 
         public async Task LoadMore()
         {
-            var userId = OfUser.UserInfo.uid;
+            var userId = OfUser?.UserInfo?.uid;
+            if(userId == null) return;
+
             if (PageType == ListWindowPageType.Fans)
                 await LoadIncremental(_livemeApiProvider.GetFans, userId);
             else
@@ -114,7 +114,7 @@ namespace LMPT.Core.Server.ViewModels
 
         private static string LastSeen(ProfileSeen watched)
         {
-            string lastSeen = null;
+            string lastSeen = string.Empty;
             if (watched != null)
             {
                 var delta = DateTime.UtcNow - watched.Seen.FromUnixTimestamp();
@@ -134,7 +134,7 @@ namespace LMPT.Core.Server.ViewModels
             var uid = userInfo.uid;
 
 
-            Users.First(x => x.UserInfo.uid == uid).LastSeen = "Just now";
+            Users.First(x => x.UserInfo?.uid == uid).LastSeen = "Just now";
 
             _viewModelMediator.Send(ViewModelNotification.ShowUser, uid);
         }

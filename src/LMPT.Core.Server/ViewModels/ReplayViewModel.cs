@@ -61,7 +61,7 @@ namespace LMPT.Core.Server.ViewModels
             IsLiked = IsLiked;
         }
 
-        public string IconsHtml { get; set; }
+        public string IconsHtml { get; set; } = string.Empty;
         public bool Watched { get; set; }
         public bool New { get; set; }
         public bool IsLiked { get; }
@@ -87,9 +87,9 @@ namespace LMPT.Core.Server.ViewModels
             isLiked = cache?.Liked ?? false;
         }
 
-        private static bool CheckIsNew(Replay cache)
+        private static bool CheckIsNew(Replay? cache)
         {
-            var isNew = false;
+            bool isNew;
             if (cache == null)
             {
                 isNew = true;

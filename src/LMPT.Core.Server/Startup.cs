@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using EmbeddedBlazorContent;
 
 namespace LMPT.Core.Server
 {
@@ -76,6 +77,7 @@ namespace LMPT.Core.Server
             // });
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
+            app.UseEmbeddedBlazorContent(typeof(BlazorVirtualScrolling.ScrollView).Assembly);
 
             app.UseRouting();
 

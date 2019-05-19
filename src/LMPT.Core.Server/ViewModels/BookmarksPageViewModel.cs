@@ -33,7 +33,7 @@ namespace LMPT.Core.Server.ViewModels
         }
 
         public ObservableCollection<Bookmark> Bookmarks { get; set; }
-        public string FilterName { get; set; }
+        public string FilterName { get; set; } = string.Empty;
         public int? FilterDaysActive { get; set; }
 
 

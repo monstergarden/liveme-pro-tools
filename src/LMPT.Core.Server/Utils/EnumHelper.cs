@@ -7,7 +7,7 @@ using System.Resources;
 
 namespace LMPT.Core.Server.Utils
 {
-    public static class EnumHelper<T>
+    public static class EnumHelper<T> 
     {
         public static IList<T> GetValues(Enum value)
         {
@@ -46,14 +46,16 @@ namespace LMPT.Core.Server.Utils
             return resourceKey; // Fallback with the key name
         }
 
-        public static string GetDisplayValue(T value)
+        public static string GetDisplayValue(T value) 
         {
+            if(value == null) return string.Empty;
             var fieldInfo = value.GetType().GetField(value.ToString());
+
 
             var descriptionAttributes = fieldInfo.GetCustomAttributes(
                 typeof(DisplayAttribute), false) as DisplayAttribute[];
 
-            if (descriptionAttributes[0].ResourceType != null)
+            if (descriptionAttributes?.FirstOrDefault()?.ResourceType != null)
                 return lookupResource(descriptionAttributes[0].ResourceType, descriptionAttributes[0].Name);
 
             if (descriptionAttributes == null) return string.Empty;

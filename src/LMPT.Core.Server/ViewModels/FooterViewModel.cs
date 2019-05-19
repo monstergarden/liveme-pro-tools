@@ -4,7 +4,7 @@ namespace LMPT.Core.Server.ViewModels
 {
     public class FooterViewModel : BaseViewModel
     {
-        public string FooterInfo { get; set; }
+        public string FooterInfo { get; set; } = string.Empty;
         public double ProgressBarProgress { get; set; }
         public bool DisplayProgressBar { get; set; }
 

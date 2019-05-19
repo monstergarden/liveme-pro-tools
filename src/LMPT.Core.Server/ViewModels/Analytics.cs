@@ -19,7 +19,7 @@ namespace LMPT.Core.Server.ViewModels
         /// Value between 0 and 1;
 
 
-        public string FooterInfo { get; set; }
+        public string FooterInfo { get; set; } = string.Empty;
 
 
         public void AddLog(LogViewModel log)

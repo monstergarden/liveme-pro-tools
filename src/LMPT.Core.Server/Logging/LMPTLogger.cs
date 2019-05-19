@@ -19,7 +19,7 @@ namespace LMPT.Core.Server.Logging
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            if (eventId == LogEventIds.ForFooter) _analytics.FooterInfo = state.ToString();
+            if (eventId == LogEventIds.ForFooter) _analytics.FooterInfo = state?.ToString() ?? string.Empty;
 
             // if((int)logLevel < 2)
             // { 
@@ -38,7 +38,7 @@ namespace LMPT.Core.Server.Logging
                     DateTimeFormatted = DateTime.Now.ToString("H:mm:ss"),
                     Source = name,
                     LogLevel = (int) logLevel,
-                    Log = state.ToString()
+                    Log = state?.ToString() ?? string.Empty
                 };
                 _analytics.AddLog(logVm);
             }
@@ -51,7 +51,7 @@ namespace LMPT.Core.Server.Logging
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            return null;
+            return null!;
         }
     }
 }

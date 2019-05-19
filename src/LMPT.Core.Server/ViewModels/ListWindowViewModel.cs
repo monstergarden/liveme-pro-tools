@@ -21,7 +21,7 @@ namespace LMPT.Core.Server.ViewModels
         public string Title => "List Window";
 
         public List<FansOrFollowingsViewModel> ViewModels = new List<FansOrFollowingsViewModel>();
-        public FansOrFollowingsViewModel Current;
+        public FansOrFollowingsViewModel? Current;
         private readonly MainViewModel mainViewModel;
         private readonly SidebarViewModelFactory _factory;
 
@@ -35,12 +35,15 @@ namespace LMPT.Core.Server.ViewModels
 
         public string PageInfo()
         {
+            if(Current == null) return string.Empty;
             var idx = ViewModels.IndexOf(Current);
             return $"{idx + 1} / {ViewModels.Count}";
         }
 
         public void Previous()
         {
+            if(Current == null) return;
+
             var idx = ViewModels.IndexOf(Current);
             if (idx > 0)
             {
@@ -51,6 +54,7 @@ namespace LMPT.Core.Server.ViewModels
         }
         public void Next()
         {
+            if(Current == null) return;
             var idx = ViewModels.IndexOf(Current);
             if (idx < ViewModels.Count - 1)
             {
@@ -66,6 +70,7 @@ namespace LMPT.Core.Server.ViewModels
 
         public void CloseCurrent()
         {
+            if(Current == null) return;
             var currentIdx = ViewModels.IndexOf(Current);
 
             // Set Current to one that makes sense

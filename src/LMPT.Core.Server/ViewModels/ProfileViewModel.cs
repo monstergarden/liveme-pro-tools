@@ -33,8 +33,8 @@ namespace LMPT.Core.Server.ViewModels
             Replays.CollectionChanged += (s, e) => NofifyChanged("Replays");
         }
 
-        public string Loading { get; private set; }
-        public LiveMeUser User { get; private set; }
+        public string Loading { get; private set; } = string.Empty;
+        public LiveMeUser? User { get; private set; }
         public bool IsBookmarked { get; private set; }
         public MainViewStatus ViewStatus { get; set; }
         public ObservableCollection<ReplayViewModel> Replays { get; set; }
@@ -42,7 +42,7 @@ namespace LMPT.Core.Server.ViewModels
 
         public string GetFullCountryName()
         {
-            var code = User.UserInfo.countryCode;
+            var code = User?.UserInfo?.countryCode;
             var fullname = CountryCodes.GetFullName(code);
             return fullname;
         }

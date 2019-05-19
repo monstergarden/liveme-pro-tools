@@ -88,15 +88,15 @@
     } 
 
 
-    private void Change(UIChangeEventArgs args)
+    private async Task Change(UIChangeEventArgs args)
     {
         var inputVal =  args.Value.ToString();
         MainViewModel.FilterName = inputVal;
-        MainViewModel.ApplyFilters();
+        await MainViewModel.ApplyFilters();
     }
 
 
-    void OnChangedDropedDownLastActive(UIChangeEventArgs args)
+    async Task OnChangedDropedDownLastActive(UIChangeEventArgs args)
     {
 
         if(int.TryParse(args.Value.ToString(), out var days))
@@ -106,7 +106,7 @@
         else{
             MainViewModel.FilterDaysActive = null;
         }
-        MainViewModel.ApplyFilters();
+        await MainViewModel.ApplyFilters();
         
     }
 

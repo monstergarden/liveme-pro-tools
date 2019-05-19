@@ -31,15 +31,15 @@ namespace LMPT.Core.Server.ViewModels
         public ISideBarViewModel BookmarkVm => _sidebarFactory.CreateBookmarksViewModel();
         public ISideBarViewModel BookmarkFeedVm => _sidebarFactory.CreateBookmarksFeedViewModel();
         public ListWindowViewModel ListVm => _sidebarFactory.CreateListWindowViewModel();
-        private CancellationTokenSource _tokenSource;
+        public MainViews CurrentView { get; set; }
+        public IEnumerable<User> LastVisited { get; set; }
 
-        public MainViewModel(MainViews currentView, string searchValue, SearchType searchType)
-        {
-            CurrentView = currentView;
-            SearchValue = searchValue;
-            SearchType = searchType;
-        }
+        public string SearchValue { get; set; } = string.Empty;
+        public SearchType SearchType { get; set; }
 
+
+        public ISideBarViewModel? SidebarViewModel { get; set; }
+        private CancellationTokenSource? _tokenSource;
 
 
 
@@ -65,14 +65,7 @@ namespace LMPT.Core.Server.ViewModels
 
   
 
-        public MainViews CurrentView { get; set; }
-        public IEnumerable<User> LastVisited { get; set; }
-
-        public string SearchValue { get; set; }
-        public SearchType SearchType { get; set; }
-
-
-        public ISideBarViewModel SidebarViewModel { get; set; }
+        
 
 
         public void Dispose()
