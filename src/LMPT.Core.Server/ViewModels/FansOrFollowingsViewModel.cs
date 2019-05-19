@@ -20,8 +20,8 @@ namespace LMPT.Core.Server.ViewModels
         private const int MaxPageSize = 15;
         public ObservableCollection<ListViewUserCard> Users { get; set; }
         public ListWindowPageType PageType { get; set; }
-        public string? UserId { get; set; }
-        public LiveMeUser? OfUser { get; set; }
+        public string UserId { get; set; }
+        public LiveMeUser OfUser { get; set; }
         private readonly CancellationTokenSource _cts;
         private readonly DataAccess _dataAccess;
 

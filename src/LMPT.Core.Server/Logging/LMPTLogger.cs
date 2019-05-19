@@ -51,7 +51,7 @@ namespace LMPT.Core.Server.Logging
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            return null!;
+            return null;
         }
     }
 }

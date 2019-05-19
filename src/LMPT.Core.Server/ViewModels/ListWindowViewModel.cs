@@ -21,7 +21,7 @@ namespace LMPT.Core.Server.ViewModels
         public string Title => "List Window";
 
         public List<FansOrFollowingsViewModel> ViewModels = new List<FansOrFollowingsViewModel>();
-        public FansOrFollowingsViewModel? Current;
+        public FansOrFollowingsViewModel Current;
         private readonly MainViewModel mainViewModel;
         private readonly SidebarViewModelFactory _factory;
 

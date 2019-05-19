@@ -6,9 +6,7 @@
       https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json;
       https://dotnet.myget.org/F/blazor-dev/api/v3/index.json;
     </RestoreAdditionalProjectSources>
-    <LangVersion>8.0</LangVersion>
-    <RazorLangVersion>3.0</RazorLangVersion>
-    <NullableContextOptions>enable</NullableContextOptions>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
     <ItemGroup>
     <PackageReference Include="Blazor.ContextMenu" Version="0.13.0" />

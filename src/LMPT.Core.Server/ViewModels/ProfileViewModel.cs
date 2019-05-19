@@ -34,7 +34,7 @@ namespace LMPT.Core.Server.ViewModels
         }
 
         public string Loading { get; private set; } = string.Empty;
-        public LiveMeUser? User { get; private set; }
+        public LiveMeUser User { get; private set; }
         public bool IsBookmarked { get; private set; }
         public MainViewStatus ViewStatus { get; set; }
         public ObservableCollection<ReplayViewModel> Replays { get; set; }

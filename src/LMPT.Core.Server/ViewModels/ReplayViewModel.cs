@@ -87,7 +87,7 @@ namespace LMPT.Core.Server.ViewModels
             isLiked = cache?.Liked ?? false;
         }
 
-        private static bool CheckIsNew(Replay? cache)
+        private static bool CheckIsNew(Replay cache)
         {
             bool isNew;
             if (cache == null)

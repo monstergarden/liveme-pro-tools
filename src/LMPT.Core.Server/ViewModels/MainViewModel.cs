@@ -38,8 +38,8 @@ namespace LMPT.Core.Server.ViewModels
         public SearchType SearchType { get; set; }
 
 
-        public ISideBarViewModel? SidebarViewModel { get; set; }
-        private CancellationTokenSource? _tokenSource;
+        public ISideBarViewModel SidebarViewModel { get; set; }
+        private CancellationTokenSource _tokenSource;
 
 
 
