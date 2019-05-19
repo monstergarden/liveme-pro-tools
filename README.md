@@ -25,10 +25,6 @@ An application for Live.me Social Video network for:
 - See and navigate user's followers and followings
 - Watch and download replays
 - Allows downloading of replays using FFMPEG
-- Supports [LAMD](https://notabug.org/thecoder75/lamd)
-
-
-
 
 
 **Current Supported Platforms:**
