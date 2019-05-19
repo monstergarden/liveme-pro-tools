@@ -1,0 +1,53 @@
+@typeparam  TEnum 
+
+
+<select value="@Value" onchange="@SelectedChanged" >
+    @{
+        var items = Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+
+            foreach (TEnum item in items)
+            {
+
+                if(item.ToString() == DefaultSelected.ToString())
+                {
+                    <option selected value="@item">
+                        @ToDisplay(item)
+                    </option>
+                }
+                else
+                {
+                    <option  value="@item">
+                        @ToDisplay(item)
+                    </option>
+                }
+              
+                
+            }
+    }
+</select>
+
+@functions {  
+
+    [Parameter]
+    private TEnum Value { get; set; }
+
+    [Parameter]
+    private EventCallback<TEnum> ValueChanged { get; set; }
+
+    [Parameter]
+    public TEnum DefaultSelected { get; set; }
+
+    async Task SelectedChanged(UIChangeEventArgs args)
+    {
+        TEnum newValue = (TEnum)(Enum.Parse(typeof(TEnum), args.Value.ToString()));
+        await ValueChanged.InvokeAsync(newValue);
+    }
+
+   string ToDisplay(TEnum enumValue)
+   {
+        var d = EnumHelper<TEnum>.GetDisplayValue(enumValue); 
+        return d;
+   } 
+
+ 
+}

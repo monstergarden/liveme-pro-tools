@@ -1,0 +1,115 @@
+@page "/bookmarks"
+@using System.Collections.Generic
+@using System.Linq;
+@using LMPT.Core.Services.Data
+@using LMPT.Core.Contract.DB.Bookmark
+@using LMPT.Core.Services.Helper;
+
+@inject BookmarksPageViewModel MainViewModel
+
+
+<GridArea Rows="auto 1fr" Areas="'header' 'list'">
+    <GridElement Area="header">
+
+        <div
+        style="    background: #333232;
+            padding: 5px 0;
+            border-bottom: solid 2px #03030380;
+    z-index: 100;"
+        >
+
+        
+
+        <a class="button active" id="filter-male" onClick="toggleMaleProfiles()">
+            <svg class="blue" viewBox="0 0 20 20">
+                <path d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"></path>
+            </svg>                    
+        </a>
+        <a class="button active" id="filter-female" onClick="toggleFemaleProfiles()">
+            <svg class="pink" viewBox="0 0 20 20">
+                <path d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"></path>
+            </svg>                    
+        </a>
+        <input type="text" oninput="@Change" placeholder="Search by Name"/>
+        <div class="active-timespan">
+            <div class="select">
+                <select id="bookmark-timespan" onchange=@OnChangedDropedDownLastActive>
+                    <option selected value="0">Show All Bookmarks</option>
+                    <option value="1">Active last 24 hours</option>
+                    <option value="2">Active last 2 days</option>
+                    <option value="3">Active last 3 days</option>
+                    <option value="5">Active last 5 days</option>
+                    <option value="7">Active last 7 days</option>
+                    <option value="14">Active last 14 days</option>
+                    <option value="30">Active last 30 days</option>
+                    <option value="90">Active last 90 days</option>
+                    <option value="180">Active last 180 days</option>
+                </select>
+            </div>
+        </div>
+        </div>
+    </GridElement>
+    <GridElement Area="list">
+        <ScrollViewer>
+            <table>
+                <tbody id="bookmark-list">
+                    <ViewModelRegion ViewModel="@MainViewModel">
+                        @if(MainViewModel != null)
+                        {
+                            @foreach (var b in MainViewModel.Bookmarks)
+                            {
+
+                                <BookmarkCard b=@b></BookmarkCard>
+                            }
+                        }
+                
+                    </ViewModelRegion>
+                </tbody>
+            </table>
+        </ScrollViewer>
+    </GridElement>
+
+
+ 
+     
+
+</GridArea>
+
+
+
+  
+
+    
+@functions{
+
+    protected override async Task OnInitAsync()
+    {
+        await MainViewModel.InitAsync();
+    } 
+
+
+    private void Change(UIChangeEventArgs args)
+    {
+        var inputVal =  args.Value.ToString();
+        MainViewModel.FilterName = inputVal;
+        MainViewModel.ApplyFilters();
+    }
+
+
+    void OnChangedDropedDownLastActive(UIChangeEventArgs args)
+    {
+
+        if(int.TryParse(args.Value.ToString(), out var days))
+        {
+           MainViewModel.FilterDaysActive = (int?)days;
+        }
+        else{
+            MainViewModel.FilterDaysActive = null;
+        }
+        MainViewModel.ApplyFilters();
+        
+    }
+
+
+}
+

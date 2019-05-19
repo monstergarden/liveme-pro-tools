@@ -1,0 +1,81 @@
+
+@inject MainViewModel TheMainViewModel;
+@inject ILogger<UserListView> Logger;
+
+@{
+        
+        var userInfo = User.UserInfo;
+        var fullcountryname = LMPT.Core.Services.CountryCodes.GetFullName(userInfo.countryCode);
+        var counts = User.LiveMeUser.CountInfo;
+        var seen = User.LastSeen ?? "";
+        var eyeStyle = User.LastSeen != null ? "blue bright" : "dim";
+        var opacity = User.LastSeen != null ? "opacity: 0.5" : "";
+        var bookmarked = User.IsBookmarked ? "star-full bright yellow" : "star-empty";
+        var gender = User.UserInfo.sex == "-1" ? "female" : "";
+        gender = User.UserInfo.sex == "1" ? "male" : gender;
+        var trClasses = $"is-{gender}";
+        
+        <tr  style="@opacity" class=@trClasses>
+            <td width="64">
+                <img src=@userInfo.face style="height: 64px; width: 64px;" align="bottom" class="avatar">
+            </td>
+            <td  width="90%">
+                <div class="seen" title="Last seen"><i class="@($"icon icon-eye {eyeStyle}")" ></i></div>
+                <div class="bookmarked"><a style="cursor: pointer"
+                                            onclick="@(() =>
+                                                        {
+                                                            User.IsBookmarked = true;
+                                                            
+                                                        })">
+                    <i class="@($"icon icon-{bookmarked}")"></i>
+                </a></div>
+                <h1>@userInfo.uname</h1>
+                <div class="countrylevel" >
+                    <div style="display: block; height: 1px; white-space: nowrap;">
+                        @userInfo.countryCode <text>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</text>
+                
+                        <b>Level:</b> @userInfo.level <text>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</text>
+                        @fullcountryname
+                    </div>
+                    <div class="cell" style="float:right">
+                        @seen
+                    </div>
+                    <br>
+                    <div class="cell" style="width: 125px;">
+                        Short ID: <a onClick="copyToClipboard('${entry.short_id}')" title="Click to copy to clipboard.">@userInfo.short_id</a>
+                    </div>
+                    <div class="cell" style="width: 160px; text-align: right;">
+                        ID: <a onClick="copyToClipboard('${entry.uid}')" title="Click to copy to clipboard.">@userInfo.uid</a>
+                    </div>
+                </div>
+                <div id="user-${entry.uid}-buttons" class="buttons">
+                    <a class="button mini view" onclick=@ShowUser >@counts.ReplayCount Replays</a>
+                    <a class="button mini fans" onclick="@ShowFans" >@counts.FollowerCount Fans</a>
+                    <a class="button mini following" onclick="@ShowFollowings" >Follows @counts.FollowingCount</a>
+                </div>
+            </td>
+        </tr>
+
+}
+
+@functions
+{
+    [Parameter] public  ListViewUserCard User { get; set; }
+
+
+    async Task ShowUser()
+    {
+        await TheMainViewModel.ShowUser(User.UserInfo.uid);
+    }  
+
+    void ShowFans()
+    {
+        TheMainViewModel.OpenFans(User.UserInfo.uid);
+    }  
+     void ShowFollowings()
+    {
+        TheMainViewModel.OpenFollowers(User.UserInfo.uid);
+    }  
+
+}
+    

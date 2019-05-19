@@ -1,0 +1,146 @@
+@using LMPT.Core.Contract.DB
+@using Bookmark = LMPT.Core.Contract.DB.Bookmark.Bookmark
+
+@inject ViewModelMediator ViewModelMediator
+@inject MainViewModel MainViewModel
+
+<style>
+    
+    .homecard-wrapper {
+        background-color: rgb(48, 48, 48);
+        box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        display: grid;
+        grid-gap: 0px 12px;
+        grid-template-columns: 64px auto;
+        grid-auto-rows: minmax(64px, 64px);
+        margin: 12px 0px 0;
+    }
+
+    .homecard-wrapper div { overflow: hidden; }
+
+    .homecard-img {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .homecard-body {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+
+
+    .homecard-new-found {
+    color: #00daf1;
+    font-size: 9pt;
+    font-weight: 600;
+    grid-column: 2;
+    grid-row: 1;
+    line-height: 16px;
+    margin: 2px 12px;
+    text-align: right;
+    }
+
+    .button-goto {
+       min-width:  100px;
+    }
+
+    
+    .homecard-body h1 {
+
+        font-size: 14pt;
+        font-weight: 300;
+        line-height: 26px;
+        margin-top: 4px;
+    }
+
+
+
+
+
+    .homecard-body a { margin-right: 6px; }
+    
+</style>
+
+
+<div class="homecard-wrapper"
+     >
+
+    <div class="homecard-img">
+        <img width="64px" height="64px" src="@Bookmark.Face" onError="$(this).hide()" alt="face"/>
+
+    </div>
+
+
+    <div class="homecard-body" style="position: relative;">
+        <h1>@Bookmark.Nickname</h1>
+   
+       
+        <div class="buttons" style="bottom: 8px; position: absolute; right:6px">
+            <a style=@(Type == NewFeed.NewReplays ? "background: #6913ab;" : "") class="button button-goto" onclick="@ShowUser">
+                Replays
+                @if(Type == NewFeed.NewReplays){
+                     <span >@NewCount</span>
+                }
+                
+            </a>
+            <a style=@(Type == NewFeed.NewFans ? "background: #6913ab;" : "") class="button button-goto" onclick=@(() => MainViewModel.OpenFans(Bookmark.Uid))>
+                Fans
+                @if(Type == NewFeed.NewFans){
+                      <span  >+ @NewCount</span>
+                }
+                
+            </a>
+            <a style=@(Type == NewFeed.NewFollowings ? "background: #6913ab;" : "") class="button button-goto" onclick=@(() => MainViewModel.OpenFollowers(Bookmark.Uid))>
+                Following
+                @if(Type == NewFeed.NewFollowings){
+                     <span >+@NewCount</span>
+                }
+               
+            </a>
+        </div>
+    </div>
+    
+    <div class="homecard-new-found">@GetFeedType()</div>
+
+
+</div>
+
+@functions
+{
+    string GetFeedType(){
+        
+        switch (Type)
+        {
+            case NewFeed.NewReplays:
+                return "New Replays" ;
+            case NewFeed.NewFollowings:
+                return "New Followers" ;
+            case NewFeed.NewFans:
+                return "New Fans" ;
+            default:
+                return "undefined feed type";
+        }  
+
+    }
+
+
+    void ShowUser()
+    {
+        ViewModelMediator.Send(ViewModelNotification.ShowUser, Bookmark.Uid);
+    }
+
+    [Parameter]
+    Bookmark Bookmark { get; set; }
+
+    [Parameter]
+    EventHandler OnBodyClick { get; set; }
+
+    [Parameter]
+    NewFeed Type { get; set; }
+
+    [Parameter]
+    long NewCount { get; set; }
+
+}

@@ -1,0 +1,70 @@
+@page "/main/profile/{UserId}"
+@page "/main/home"
+@page "/"
+@inject MainViewModel MainViewModel
+
+
+<link rel="stylesheet" href="css/page_index.css" media="all">
+<link rel="stylesheet" href="css/page_listwindow.css" media="all">
+
+<style>
+
+#page {
+  width: 100vw;
+  height: 100vh;
+}
+
+
+</style>
+
+
+<ViewModelRegion ViewModel="@MainViewModel">
+    <div id="page">
+        @{
+            var columns = MainViewModel.SidebarViewModel == null 
+                ? "40px 0px 1fr"
+                : "40px 400px 1fr";
+        }
+        
+        <GridArea 
+            Columns=@columns
+            Rows="30px 1fr auto"
+            Areas="        
+                'head head head'
+                'nav side main'
+                'foot foot foot'
+            ">
+            <GridElement Area="head">
+                <HomeToolbar></HomeToolbar>
+            </GridElement>
+            <GridElement Area="nav">
+                <div style="background:#2d2d2c; height:100%">
+                    <SideBarNavigation></SideBarNavigation>
+                </div>
+            </GridElement>
+            <GridElement id="sidebar" Area="side">
+                <div style="background:#262626; height:100%">
+                <SideBar></SideBar>
+                </div>
+            </GridElement>
+            <GridElement Area="main">
+                <ScrollViewer>
+                    <HomeMain/>
+                </ScrollViewer>
+            </GridElement>
+            <GridElement Area="foot">
+                <div style="
+                    background: #c333ba;
+                    color: #ffffff;
+        ">
+
+                <HomeFooter></HomeFooter>
+                </div>
+
+            </GridElement>
+        </GridArea>
+    </div>
+</ViewModelRegion>
+
+
+

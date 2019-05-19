@@ -1,0 +1,33 @@
+
+<div id="@id" style="@ElementStyle">
+    @ChildContent
+</div>
+
+@functions
+{
+    string ElementStyle;
+    [Parameter]public string Area { get; set; } = "";
+    [Parameter]public string id { get; set; } = "";
+    [Parameter]public bool Scroll { get; set; }
+    [CascadingParameter] protected bool CascadingDebug { get; set; }
+    [Parameter] private RenderFragment ChildContent { get; set; }
+    static Random random = new Random();
+    protected override void OnParametersSet()
+    {
+       
+
+    var sb = new StyleBuilder("grid-area", Area);
+           
+        if(CascadingDebug)
+        {
+            var color = String.Format("#{0:X6}", random.Next(0x1000000));
+            sb.AddStyle("background", color);
+        }
+        sb.AddStyle("height", "100%");
+      
+        sb.AddStyle("overflow", "hidden", when:!Scroll);
+        sb.AddStyle("overflow", "scroll", when:Scroll);
+        ElementStyle = sb.Build();
+          
+    }
+}

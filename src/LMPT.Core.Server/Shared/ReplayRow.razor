@@ -1,0 +1,73 @@
+@inject IJSRuntime JSRuntime;
+@inject ProfileViewModel MainViewModel;
+
+  
+  <ViewModelRegion ViewModel="@Replay">
+      @{
+        var color = Replay.New ? "" : "grey";
+        color = Replay.Watched ? "darkseagreen" : color; 
+      }
+
+     
+<tr>
+        <td style="cursor: pointer;color:@color" width="300" oncontextmenu="@menuJs" onclick="@OnClick" align="left" >
+            <i class=@($"icon icon-eye {Replay.EyeStyle}")></i>
+            @(Replay.IsLiked ? Icons.Heart("") : (MarkupString) "")
+        
+            @Replay.Title
+        </td>
+        <td style="cursor: pointer;color:@color" width="230" oncontextmenu="@menuJs"  onclick="@OnClick" align="center">@Replay.Date</td>
+        <td style="cursor: pointer;color:@color" width="55" oncontextmenu="@menuJs"   onclick="@OnClick" align="right">@Replay.Duration</td>
+        <td style="cursor: pointer;color:@color" width="75" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.Likes</td>
+        <td style="cursor: pointer;color:@color" width="33" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.VPM</td>
+        <td style="cursor: pointer;color:@color" width="75" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.Likes</td>
+        <td style="cursor: pointer;color:@color" width="33" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.LPM</td>
+        <td style="cursor: pointer;color:@color" width="75" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.Shares</td>
+        <td style="cursor: pointer;color:@color" width="33" oncontextmenu="@menuJs"   onclick="@OnClick" align="right" >@Replay.SPM</td>
+    <td style="cursor: pointer;color:@color" width="35"  style="padding: 0 0.5em; text-align: right;"></td>
+    <td style="cursor: pointer;color:@color" width="40"  style="padding: 0 0.5em; text-align: right;">
+    <ContextMenuTrigger MenuId="ReplayContextMenu" MouseButtonTrigger="MouseButtonTrigger.Left">
+        <a class="button " title="menu">...</a>
+    </ContextMenuTrigger>
+
+    </td>
+</tr>
+
+
+<style>
+    .my-menu{
+        margin-left: -140px;
+    }
+</style>
+        <ContextMenu CssClass="my-menu" Id="ReplayContextMenu">
+            <Item>Open Bookmarks</Item>
+            <Item>Settings</Item>
+        </ContextMenu>
+ 
+
+    </ViewModelRegion>
+
+
+@functions{
+
+    [Parameter] ReplayViewModel Replay {get; set;}
+
+    string menuJs => "openReplayContextMenu(" + Replay.Vid +")";
+
+    async Task OnClick()
+    {
+        try
+        {
+            var vid = Replay.Vid;
+            MainViewModel.SetReplayToWatched(vid);
+            var res = await JSRuntime.InvokeAsync<string>("openURL", $"/player/{vid}");
+        }
+        catch (System.Exception)
+        {
+                 
+        }
+       
+    }
+
+
+}

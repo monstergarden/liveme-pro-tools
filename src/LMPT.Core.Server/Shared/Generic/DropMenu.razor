@@ -1,0 +1,33 @@
+<div class="btn-group @classes">
+    <button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Action
+    </button>
+    <div class="dropdown-menu">
+       @ChildContent
+    </div>
+</div>
+
+@functions
+{
+    public enum DropType
+    {
+        DropDown,
+        DropLeft,
+        DropRight,
+        DropUp,
+    }
+
+    [Parameter]public RenderFragment ChildContent { get; set; } 
+    [Parameter]public DropType Direction { get; set; } 
+
+    string classes;
+
+    protected override void OnParametersSet()
+    {
+        var cb = new CssBuilder()
+            .AddClass("dropleft", when: Direction == DropType.DropLeft)
+            .AddClass("dropright", when: Direction == DropType.DropRight)
+            .AddClass("dropup", when: Direction == DropType.DropUp);
+        classes = cb.Build();
+    }
+}

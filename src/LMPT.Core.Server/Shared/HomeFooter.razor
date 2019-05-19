@@ -1,0 +1,31 @@
+ @inject FooterViewModel Analytics;
+ @inject JsInteropHelper JsInteropHelper;
+ 
+
+    <ViewModelRegion ViewModel="@Analytics">
+        
+            <span style="margin:2px 6px; padding: 1px 10px" id="coreStatus" onclick="triggerCoreStart()">Core Status</span>
+            <button class="button" onclick="@OpenCoreControl">Core Control</button>
+            
+            
+            @{
+                var progress = Analytics.ProgressBarProgress;
+                var displayProgressbar = Analytics.DisplayProgressBar ? "display:inline-block" : "display:none";
+            }
+            <div style="@displayProgressbar" id="footer-progressbar">
+                <div style="width:@(progress*100)%"></div>
+            </div>
+         
+            <h1>@Analytics.FooterInfo</h1>
+            
+    </ViewModelRegion>           
+
+@functions
+{
+    async Task OpenCoreControl()
+    {
+        await JsInteropHelper.OpenUrlInNewTab("/coreControl");
+    }
+}
+
+        

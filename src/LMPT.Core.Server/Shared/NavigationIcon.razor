@@ -1,0 +1,35 @@
+
+<style>
+        .sidebarNavIcon:hover {
+    background-color: rgba(255,255,255,0.1);
+        }
+</style>
+
+
+
+<div class="sidebarNavIcon"  
+onclick=@OnClick
+style= "    text-align: center;
+    line-height: 40px;">
+    <div  style="transform: scale(1.4)">
+
+ <a 
+    title=@Title >
+                <svg viewBox="0 0 20 20">
+                    <path d=@IconString></path>
+                </svg>                
+</a>
+    </div>
+
+
+</div>
+
+
+
+@functions
+{
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public string IconString { get; set; }
+    [Parameter] public string Title { get; set; }
+
+}

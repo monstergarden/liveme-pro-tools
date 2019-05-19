@@ -1,7 +1,21 @@
-/node_modules/*
+node_modules
 /.git/*
-/dist/*
+/dist/
+/.vscode/
+bin
+obj
+.idea
+
+current_release_notes
 
 package-lock.json
 yarn-error.log
 yarn.lock
+
+*.*~
+*.log
+
+artifacts
+lcov.info
+lcov.opencover.xml
+.tmp

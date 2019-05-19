@@ -1,0 +1,86 @@
+@using System
+@using System.Collections.Immutable
+@using System.Linq
+@using System.Threading.Tasks
+@using Microsoft.AspNetCore.Components
+@using LMPT.Core;
+@using LMPT.Core.Services.LivemeApi
+@using LMPT.DB
+@inject MainViewModel MainViewModel;
+@inject ListWindowViewModel ListWindowViewModel;
+@inject LivemeApiProvider LivemeApiProvider;
+@inject ILogger<HomeMain> Logger;
+    
+    <style>
+.homemain  {
+  display: grid;
+  grid-template-areas: "history news";
+  grid-template-columns: 1fr 1fr;
+}
+ .news {
+  grid-area: news;
+  padding: 24px;
+}
+
+ .history {
+  grid-area: history;
+  padding: 24px;
+}
+
+</style>
+
+
+<ViewModelRegion ViewModel="@MainViewModel">
+    @if(MainViewModel.CurrentView == MainViews.WorkInProgress)
+    {
+        <div style="margin:120px auto">
+        <h1 align="center">Not Implemented Yet! :/</h1>
+        </div>
+    }
+    else if(MainViewModel.CurrentView == MainViews.NotFound)
+    {
+        <div style="margin:120px auto">
+        <h1 align="center">Not Found :/</h1>
+        </div>
+    }
+    else if(MainViewModel.CurrentView == MainViews.Home)
+    {
+        <div class="homemain" >
+            <div class="news">
+                <NewsAndTips></NewsAndTips>
+            </div>
+
+            <div class="history panel tips">
+                    <h3 style="margin-top:80px">Last Viewed</h3>
+
+                    @foreach (var item in MainViewModel.LastVisited)
+                    {
+                        <div style="margin:6px; padding:6px; cursor:pointer; background:#313131;" onclick=@(_ =>  MainViewModel.ShowUser(item.UId))>
+                        Profile of @item.Name
+                        </div>
+                    }
+            </div>
+        </div>
+    }
+    else
+    {
+        <ProfileView></ProfileView>
+    }
+</ViewModelRegion>
+
+
+@functions {
+	[Parameter]public string UserId { get; set;}
+
+	protected override async Task OnInitAsync()
+	{  
+		Logger.LogDebug("OnInit MainPage");
+		await MainViewModel.Init();
+
+		if (UserId != null)
+		{
+			await MainViewModel.ShowUser(UserId);
+		}
+	}
+
+}
