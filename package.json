@@ -9,7 +9,8 @@
         "url": "https://github.com/monstergarden/liveme-pro-tools"
     },
     "scripts": {
-        "watch": "dotnet watch  --project ./src/LMPT.Core.Server  run"
+        "watch": "dotnet watch  --project ./src/LMPT.Core.Server  run",
+        "open": "cd ./artifacts && ./LMPT.Core.Server"
     },
     "author": "MonsterGarden",
     "license": "GPL-3.0"

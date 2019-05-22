@@ -9,8 +9,8 @@
         var fullcountryname = LMPT.Core.Services.CountryCodes.GetFullName(userInfo.countryCode);
         var counts = User.LiveMeUser?.CountInfo;
         var seen = User.LastSeen ?? "";
-        var eyeStyle = User.LastSeen != null ? "blue bright" : "dim";
-        var opacity = User.LastSeen != null ? "opacity: 0.5" : "";
+        var eyeStyle = string.IsNullOrWhiteSpace(User.LastSeen) ? "dim" : "blue bright";
+        var opacity = string.IsNullOrWhiteSpace(User.LastSeen) ?  "" : "opacity: 0.5";
         var bookmarked = User.IsBookmarked ? "star-full bright yellow" : "star-empty";
         var gender = User.UserInfo.sex == "-1" ? "female" : "";
         gender = User.UserInfo.sex == "1" ? "male" : gender;
@@ -68,6 +68,8 @@
     {
         if(User?.UserInfo != null) 
         {
+            User.LastSeen = "Just now";
+            StateHasChanged();
             await TheMainViewModel.ShowUser(User.UserInfo.uid);
         }
     }  
