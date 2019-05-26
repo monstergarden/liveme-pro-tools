@@ -1,0 +1,22 @@
+<img width="100px"   src="@Src" alt="thumb" />
+@functions
+{
+    [Parameter] public string Base64String { get; set; }
+    public string Src { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if(Base64String == null)
+        {
+        Base64String = @"iVBORw0KGgoAAAANSUhEUgAAAAUA
+AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+    9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        }
+
+        Src = "data:image/png;base64, " + Base64String;
+
+        
+
+    }
+    
+}

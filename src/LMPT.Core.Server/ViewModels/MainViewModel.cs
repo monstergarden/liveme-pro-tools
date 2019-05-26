@@ -7,6 +7,7 @@ using LMPT.Core.Contract.DB.Cache;
 using LMPT.Core.Services.Data;
 using LMPT.Core.Services.LivemeApi;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace LMPT.Core.Server.ViewModels
 {
@@ -41,19 +42,23 @@ namespace LMPT.Core.Server.ViewModels
         public ISideBarViewModel SidebarViewModel { get; set; }
         private CancellationTokenSource _tokenSource;
 
-
+        public DataAccess DataAccess { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
 
         public MainViewModel(ILogger<MainViewModel> logger,
-            DataAccess dataAccess,
-            ViewModelMediator viewModelMediator,
-            SidebarViewModelFactory sidebarFactory,
-            ProfileViewModel profileViewModel,
-            LivemeApiProvider api
-        )
+                    DataAccess dataAccess,
+                    ViewModelMediator viewModelMediator,
+                    IServiceProvider serviceProvider,
+                    SidebarViewModelFactory sidebarFactory,
+                    ProfileViewModel profileViewModel,
+                    LivemeApiProvider api
+                )
         {
             _logger = logger;
             _dataAccess = dataAccess;
+            DataAccess = _dataAccess;
             _viewModelMediator = viewModelMediator;
+            ServiceProvider = serviceProvider;
             _sidebarFactory = sidebarFactory;
             _profileViewModel = profileViewModel;
             _livemeApi = api;
@@ -63,9 +68,39 @@ namespace LMPT.Core.Server.ViewModels
             SearchType = SearchType.userID;
         }
 
-  
 
-        
+        public Action<string> InteractiveOut { get; set; }
+
+        public void Test()
+        {
+            PrintMethods(DataAccess);
+        }
+
+        public void PrintAsJson(object o)
+        {
+            var s = JsonConvert.SerializeObject(o, Formatting.Indented,
+            new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            InteractiveOut?.Invoke(s);
+        }
+
+        public void PrintMethods(object o)
+        {
+            var ms = o.GetType().GetMethods();
+            foreach(var m in ms)
+            {
+                InteractiveOut?.Invoke(m.Name);
+            }
+        }
+
+
+
+
+
+
+
 
 
         public void Dispose()

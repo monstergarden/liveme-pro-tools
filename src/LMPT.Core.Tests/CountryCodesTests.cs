@@ -12,5 +12,11 @@ namespace Tests
         {
             CountryCodes.GetFullName("us").ShouldBe("USA");
         }   
+        [Test]
+        public async Task TestAsync()
+        {
+            var res = await LMPT.Core.Services.Helper.Utils.ExtractFirstFrameAsync();
+            System.Console.WriteLine(res);
+        }   
     }
 }

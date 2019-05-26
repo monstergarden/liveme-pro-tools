@@ -1,5 +1,6 @@
 @inject IJSRuntime JSRuntime;
 @inject ProfileViewModel MainViewModel;
+@inject ILogger<ReplayRow> Logger;
 
   
   <ViewModelRegion ViewModel="@Replay">
@@ -7,6 +8,13 @@
         var color = Replay.New ? "" : "grey";
         color = Replay.Watched ? "darkseagreen" : color; 
       }
+
+@if(Replay.ShowThumb)
+{
+        <ImageBase64 Base64String="@base64"></ImageBase64>
+
+}
+
 
      
 <tr>
@@ -53,6 +61,17 @@
     [Parameter] ReplayViewModel Replay {get; set;}
 
     string menuJs => "openReplayContextMenu(" + Replay.Vid +")";
+    string base64 {get; set;} = "";
+
+    protected override async Task OnInitAsync()
+    {
+        Logger.LogInformation("show thumb: " + Replay.ShowThumb);
+        if(Replay.ShowThumb)
+        {
+            base64 = await LMPT.Core.Services.Helper.Utils.ExtractFirstFrameAsync(Logger, Replay.VideoUrl);
+            StateHasChanged();
+        }
+    }
 
     async Task OnClick()
     {

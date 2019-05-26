@@ -91,6 +91,8 @@ namespace LMPT.Core.Server.ViewModels
         {
             ViewStatus = MainViewStatus.LoadingReplays;
 
+            var loadedCount = 0;
+
 
             // first the cache will be read, so we can determine
             // between new replays the user never saw before.
@@ -112,8 +114,24 @@ namespace LMPT.Core.Server.ViewModels
             ViewStatus = MainViewStatus.ReplaysFound;
 
 
-            foreach (var r in replays) Replays.Add(new ReplayViewModel(r, replayCache));
-            foreach (var r in onlyInCache) Replays.Add(new ReplayViewModel(r));
+            foreach (var r in replays)
+            {
+               
+                var rvm = new ReplayViewModel(r, replayCache)
+                {
+                    ShowThumb =  ++loadedCount < 10
+                };
+                Replays.Add(rvm);
+            }
+
+            foreach (var r in onlyInCache)
+            {
+                var rvm = new ReplayViewModel(r)
+                {
+                    ShowThumb =  ++loadedCount < 10
+                };
+                Replays.Add(rvm);
+            }
 
             var index = 1;
             while (replays.Count == 10 && index < 3)
@@ -127,7 +145,11 @@ namespace LMPT.Core.Server.ViewModels
                 foreach (var r in replays)
                 {
                     if (onlyInCache.Any(x => x.VId == r.Vid)) Replays.Remove(Replays.First(x => x.Vid == r.Vid));
-                    Replays.Add(new ReplayViewModel(r, replayCache));
+                    var rvm = new ReplayViewModel(r, replayCache)
+                    {
+                        ShowThumb =  ++loadedCount < 10
+                    };
+                    Replays.Add(rvm);
                 }
             }
         }

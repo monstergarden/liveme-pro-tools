@@ -59,6 +59,7 @@ namespace LMPT.Core.Server.ViewModels
             Watched = Watched;
             New = false;
             IsLiked = IsLiked;
+            VideoUrl = r.VideoUrl;
         }
 
         public string IconsHtml { get; set; } = string.Empty;
@@ -76,6 +77,9 @@ namespace LMPT.Core.Server.ViewModels
         public string LPM { get; set; } = "<null>";
         public string SPM { get; set; } = "<null>";
         public string EyeStyle { get; } = "<null>";
+
+        public string VideoUrl { get; set; }
+        public bool ShowThumb { get;  set; }
 
         private static void CheckAgainstCache(List<Replay> replayCache, ReplayFromLiveme r,
             out bool watched, out bool isNew, out bool isLiked)

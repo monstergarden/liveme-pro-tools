@@ -1,0 +1,41 @@
+@page "/tryout"
+
+@inject Interactive<MainViewModel> Interactive;
+@inject MainViewModel MainViewModel;
+<main>
+
+<input style="width:80vw" bind="@Code"/>
+
+<button onchange="@Run" onclick="@Run">Eval</button>
+
+@foreach (var res in Results)
+{
+    <p>@res</p>
+}
+
+</main>
+
+
+@functions{
+
+    public string Code { get; set; }
+    public List<string> Results { get; set; }
+
+
+
+    protected override async Task OnInitAsync()
+    {
+        Results = new List<string>();
+        await Interactive.Init();
+        MainViewModel.InteractiveOut = (s) => Results.Add(s);
+    }
+
+    async Task Run()
+    {
+        var res = await Interactive.Eval(Code);
+        Results.Add(res);
+        StateHasChanged();
+    }
+
+    
+}

@@ -19,7 +19,7 @@ namespace LMPT.Core.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             services.AddLogging(builder =>
             {
                 builder.AddConsole();
@@ -37,14 +37,16 @@ namespace LMPT.Core.Server
                 .AddScoped<BookmarkFeedViewModel>()
                 .AddScoped<ListWindowViewModel>()
                 .AddScoped<MainViewModel>()
+                .AddScoped<Interactive<MainViewModel>>()
                 .AddScoped<ProfileViewModel>()
                 .AddScoped<SideBarHelper>()
                 .AddSingleton<ViewModelMediator>()
                 .AddSingleton<Analytics>()
                 .AddTransient<FansOrFollowingsViewModel>();
 
-            
-            
+
+  
+
             services.AddBlazorContextMenu(options =>
             {
                 //Configures the default template
